@@ -21,8 +21,8 @@ exception ConditionTemplateAlreadyExists {
 
 enum YearsOffset {
     current_year = 0
-    one_year_offset = 1
-    two_year_offset = 2
+    current_with_last_years = 1
+    current_with_two_last_years = 2
 }
 
 struct ConditionTemplateObject {
