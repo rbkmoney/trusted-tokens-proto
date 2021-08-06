@@ -27,7 +27,7 @@ enum YearsOffset {
 
 struct ConditionTemplateRequest {
     1: required ConditionTemplateName name
-    2: optional ConditionTemplate template
+    2: required ConditionTemplate template
 }
 
 struct ConditionTemplate {
@@ -53,11 +53,15 @@ struct Condition {
 
 service TrustedTokens {
 
-        bool IsTokenTrusted (1: CardToken card_token, 2: ConditionTemplateRequest condition_template) throws (
-            1: InvalidRequest ex1
-            2: ConditionTemplateNotFound ex2)
+        bool IsTokenTrusted (1: CardToken card_token, 2: ConditionTemplate condition_template) throws (
+            1: InvalidRequest ex1)
 
-        void CreateNewConditionTemplate (1: ConditionTemplateRequest condition_template) throws (
+        bool IsTokenTrustedByConditionTemplateName
+            (1: CardToken card_token, 2: ConditionTemplateName condition_template_name) throws (
+                1: InvalidRequest ex1
+                2: ConditionTemplateNotFound ex2)
+
+        void CreateNewConditionTemplate (1: ConditionTemplateRequest condition_template_request) throws (
             1: InvalidRequest ex1
             2: ConditionTemplateAlreadyExists ex2)
 
