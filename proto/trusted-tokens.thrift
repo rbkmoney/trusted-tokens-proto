@@ -2,13 +2,22 @@ namespace java com.rbkmoney.trusted.tokens
 namespace erlang trusted_tokens
 
 typedef string CardToken
+typedef string ConditionTemplateName
 typedef string CurrencySymbolicCode
+typedef i64 TransactionsSum
+typedef i32 TransactionsCount
 
 exception InvalidRequest {
     1: required list<string> errors
 }
 
-struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
+exception ConditionTemplateNotFound {
+    1: optional string message
+}
+
+exception ConditionTemplateAlreadyExists {
+    1: optional string message
+}
 
 enum YearsOffset {
     current_year = 0
@@ -17,37 +26,39 @@ enum YearsOffset {
 }
 
 struct ConditionTemplateObject {
-    1: required string name
-    2: optional ConditionTemplate condition_template
+    1: required ConditionTemplateName name
+    2: optional ConditionTemplate template
 }
 
 struct ConditionTemplate {
-    1: optional Payments payments
-    2: optional Withdrawals withdrawals
+    1: optional PaymentsConditions payments_conditions
+    2: optional WithdrawalsConditions withdrawals_conditions
 }
 
-struct Payments {
-    1: required list<Condition> condition
+struct PaymentsConditions {
+    1: required list<Condition> conditions
 }
 
-struct Withdrawals {
-    1: required list<Condition> condition
+struct WithdrawalsConditions {
+    1: required list<Condition> conditions
 }
 
 struct Condition {
-    1: required CurrencyRef currency
+    1: required CurrencySymbolicCode currency_symbolic_code
     2: required YearsOffset years_offset
-    3: optional i64 sum
-    4: required i32 count
+    3: optional TransactionsSum sum
+    4: required TransactionsCount count
 }
 
 
 service TrustedTokens {
 
-        bool IsTokenTrusted (1: ConditionTemplateObject condition_template, 2: CardToken card_token)
-        throws (1: InvalidRequest ex)
+        bool IsTokenTrusted (1: CardToken card_token, 2: ConditionTemplateObject condition_template) throws (
+            1: InvalidRequest ex
+            2: ConditionTemplateNotFound ex)
 
-        void CreateNewConditionTemplate (1: ConditionTemplateObject condition_template)
-        throws (1: InvalidRequest ex)
+        void CreateNewConditionTemplate (1: ConditionTemplateObject condition_template) throws (
+            1: InvalidRequest ex
+            2: ConditionTemplateAlreadyExists ex)
 
 }
