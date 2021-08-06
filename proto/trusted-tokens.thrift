@@ -54,11 +54,11 @@ struct Condition {
 service TrustedTokens {
 
         bool IsTokenTrusted (1: CardToken card_token, 2: ConditionTemplateObject condition_template) throws (
-            1: InvalidRequest ex
-            2: ConditionTemplateNotFound ex)
+            1: InvalidRequest ex1
+            2: ConditionTemplateNotFound ex2)
 
         void CreateNewConditionTemplate (1: ConditionTemplateObject condition_template) throws (
-            1: InvalidRequest ex
-            2: ConditionTemplateAlreadyExists ex)
+            1: InvalidRequest ex1
+            2: ConditionTemplateAlreadyExists ex2)
 
 }
