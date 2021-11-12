@@ -51,6 +51,7 @@ struct Condition {
 }
 
 
+
 service TrustedTokens {
 
         bool IsTokenTrusted (1: CardToken card_token, 2: ConditionTemplate condition_template) throws (
